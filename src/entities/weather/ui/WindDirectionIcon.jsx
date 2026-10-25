@@ -20,12 +20,18 @@ const directionIcons = [
     MdNorthWest,
 ];
 
-const WindDirectionIcon = ({ degrees }) => {
+const WindDirectionIcon = ({ degrees, className }) => {
     if (degrees == null) return null;
 
     const Icon = directionIcons[Math.round(degrees / 45) % 8];
 
-    return <Icon aria-label={`Направление ветра: ${degrees}°`} role="img" />;
+    return (
+        <Icon
+            className={className}
+            aria-label={`Направление ветра: ${degrees}°`}
+            role="img"
+        />
+    );
 };
 
 export default WindDirectionIcon;

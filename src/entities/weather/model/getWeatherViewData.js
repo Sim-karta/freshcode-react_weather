@@ -9,6 +9,7 @@ export function getWeatherViewData(weather) {
         temperature: weather.temperature_2m,
         windSpeed: weather.wind_speed_10m,
         windDirection: weather.wind_direction_10m,
+        weatherCode: weather.weather_code,
         weatherInfo: weathersCode[weather.weather_code] ?? "Unknown",
         dayAndTime: time
             ? new Date(`${time}Z`).toLocaleString("en-GB", {

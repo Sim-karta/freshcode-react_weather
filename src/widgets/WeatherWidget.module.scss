@@ -1,0 +1,108 @@
+.widget {
+    display: grid;
+    gap: 10px;
+    width: min(100%, 340px);
+    margin: 24px auto;
+    padding: 12px;
+    overflow: hidden;
+    color: var(--color-light);
+    font-family: Arial, sans-serif;
+    background: var(--color-dark);
+    border-radius: 30px;
+}
+
+.widgetHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 124px;
+    padding: 14px;
+    background: var(--color-dark-surface);
+    border-radius: 22px;
+}
+
+.widgetConditionIcon {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    object-fit: contain;
+}
+
+.widgetDetails {
+    min-width: 0;
+}
+
+.widgetTime {
+    margin-bottom: 2px;
+    color: var(--color-gray);
+    font-size: 9px;
+}
+
+.widgetCondition {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.widgetLocation {
+    margin-top: 3px;
+    color: var(--color-light-10);
+    font-size: 12px;
+}
+
+.widgetWind {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 42px;
+    padding: 8px 12px;
+    color: var(--color-light);
+    font-size: 11px;
+    background: var(--color-dark-surface);
+    border-radius: 22px;
+}
+
+.widgetWindSpeed {
+    padding: none;
+}
+
+.widgetWindDirection {
+    color: var(--color-gray);
+}
+
+.forecastList {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.forecastDay {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 96px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 2px;
+    color: var(--color-light);
+    font-size: 9px;
+    text-align: center;
+    background: var(--color-dark-surface);
+    border-radius: 18px;
+}
+
+.forecastDayName {
+    display: block;
+}
+
+.forecastIcon {
+    width: 24px;
+    height: 24px;
+    margin-top: 6px;
+    object-fit: contain;
+}
+
+.forecastToday {
+    background: var(--color-dark-highlight);
+}
