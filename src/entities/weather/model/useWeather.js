@@ -6,12 +6,24 @@ export function useWeather(latitude, longitude) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getWeather(latitude, longitude)
-            .then(({ current }) => {
-                setWeather(current);
-                setError(null);
-            })
-            .catch(setError);
+        let timeoutId;
+
+        const updateWeather = () => {
+            getWeather(latitude, longitude)
+                .then(({ current }) => {
+                    setWeather(current);
+                    setError(null);
+                })
+                .catch(setError);
+
+            timeoutId = setTimeout(updateWeather, 60000);
+        };
+
+        updateWeather();
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, [latitude, longitude]);
 
     return { weather, setWeather, error };
