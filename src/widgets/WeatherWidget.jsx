@@ -1,11 +1,24 @@
-import { useEffect, useState } from "react";
-import { getWeather } from "../shared/api/weather.js";
-
-const LATITUDE_ZP = 47.84;
-const LONGITUDE_ZP = 35.14;
+import { useEffect } from "react";
+import {
+    MdNorth,
+    MdNorthEast,
+    MdEast,
+    MdSouthEast,
+    MdSouth,
+    MdSouthWest,
+    MdWest,
+    MdNorthWest,
+} from "react-icons/md";
+import { getWeather } from "../shared/api/weather";
+import { useWeather } from "../entities/weather/model/useWeather";
+import { LATITUDE_ZP, LONGITUDE_ZP } from "../shared/configs/coordinates";
+import weathersCode from "../shared/configs/weathersCode";
 
 const WeatherWidget = () => {
-    const [weather, setWeather] = useState(null);
+    const { weather, setWeather, error } = useWeather(
+        LATITUDE_ZP,
+        LONGITUDE_ZP,
+    );
 
     useEffect(() => {
         getWeather(LATITUDE_ZP, LONGITUDE_ZP)
@@ -16,7 +29,7 @@ const WeatherWidget = () => {
     const temperature = weather?.temperature_2m;
     const windSpeed = weather?.wind_speed_10m;
     const windDirection = weather?.wind_direction_10m;
-    const precipitation = weather?.precipitation;
+    const weatherInfo = weathersCode[weather?.weather_code];
     const time = weather?.time;
     const dayAndTime = time
         ? new Date(`${time}Z`).toLocaleString("en-GB", {
@@ -27,17 +40,36 @@ const WeatherWidget = () => {
           })
         : "";
 
+    const directions = [
+        <MdNorth />,
+        <MdNorthEast />,
+        <MdEast />,
+        <MdSouthEast />,
+        <MdSouth />,
+        <MdSouthWest />,
+        <MdWest />,
+        <MdNorthWest />,
+    ];
+
+    const windDirectionArrow =
+        windDirection == null
+            ? null
+            : directions[Math.round(windDirection / 45) % 8];
+
     return (
         <div>
             <div>
                 <img src="123" alt="" />
                 <div>
                     <p>{dayAndTime}</p>
-                    <p>{`Cloudy ${temperature}`}</p>
+                    <p>{`${weatherInfo} ${temperature}`}</p>
                     <p>Zaporizhzhia, Ukraine</p>
                 </div>
             </div>
-            <div>{`Wind: ${windDirection} ${windSpeed} ${precipitation}`} </div>
+            <div>
+                {windDirectionArrow}
+                {`Wind: ${windSpeed} km/h`}
+            </div>
             <div>
                 <ul>
                     <li>Today</li>
