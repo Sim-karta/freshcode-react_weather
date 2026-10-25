@@ -11,8 +11,8 @@ import {
 } from "react-icons/md";
 import { getWeather } from "../shared/api/weather";
 import { useWeather } from "../entities/weather/model/useWeather";
+import { getWeatherViewData } from "../entities/weather/model/getWeatherViewData";
 import { LATITUDE_ZP, LONGITUDE_ZP } from "../shared/configs/coordinates";
-import weathersCode from "../shared/configs/weathersCode";
 
 const WeatherWidget = () => {
     const { weather, setWeather, error } = useWeather(
@@ -26,19 +26,7 @@ const WeatherWidget = () => {
             .catch(console.error);
     }, []);
 
-    const temperature = weather?.temperature_2m;
-    const windSpeed = weather?.wind_speed_10m;
-    const windDirection = weather?.wind_direction_10m;
-    const weatherInfo = weathersCode[weather?.weather_code];
-    const time = weather?.time;
-    const dayAndTime = time
-        ? new Date(`${time}Z`).toLocaleString("en-GB", {
-              weekday: "long",
-              hour: "2-digit",
-              minute: "2-digit",
-              timeZone: "UTC",
-          })
-        : "";
+    const weatherView = getWeatherViewData(weather);
 
     const directions = [
         <MdNorth />,
@@ -52,23 +40,23 @@ const WeatherWidget = () => {
     ];
 
     const windDirectionArrow =
-        windDirection == null
+        weatherView?.windDirection == null
             ? null
-            : directions[Math.round(windDirection / 45) % 8];
+            : directions[Math.round(weatherView?.windDirection / 45) % 8];
 
     return (
         <div>
             <div>
                 <img src="123" alt="" />
                 <div>
-                    <p>{dayAndTime}</p>
-                    <p>{`${weatherInfo} ${temperature}`}</p>
+                    <p>{weatherView?.dayAndTime}</p>
+                    <p>{`${weatherView?.weatherInfo} ${weatherView?.temperature}`}</p>
                     <p>Zaporizhzhia, Ukraine</p>
                 </div>
             </div>
             <div>
                 {windDirectionArrow}
-                {`Wind: ${windSpeed} km/h`}
+                {`Wind: ${weatherView?.windSpeed} km/h`}
             </div>
             <div>
                 <ul>
