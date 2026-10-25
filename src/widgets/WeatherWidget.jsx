@@ -1,18 +1,9 @@
 import { useEffect } from "react";
-import {
-    MdNorth,
-    MdNorthEast,
-    MdEast,
-    MdSouthEast,
-    MdSouth,
-    MdSouthWest,
-    MdWest,
-    MdNorthWest,
-} from "react-icons/md";
 import { getWeather } from "../shared/api/weather";
 import { useWeather } from "../entities/weather/model/useWeather";
 import { getWeatherViewData } from "../entities/weather/model/getWeatherViewData";
 import { LATITUDE_ZP, LONGITUDE_ZP } from "../shared/configs/coordinates";
+import WindDirectionIcon from "../entities/weather/ui/WindDirectionIcon";
 
 const WeatherWidget = () => {
     const { weather, setWeather, error } = useWeather(
@@ -28,22 +19,6 @@ const WeatherWidget = () => {
 
     const weatherView = getWeatherViewData(weather);
 
-    const directions = [
-        <MdNorth />,
-        <MdNorthEast />,
-        <MdEast />,
-        <MdSouthEast />,
-        <MdSouth />,
-        <MdSouthWest />,
-        <MdWest />,
-        <MdNorthWest />,
-    ];
-
-    const windDirectionArrow =
-        weatherView?.windDirection == null
-            ? null
-            : directions[Math.round(weatherView?.windDirection / 45) % 8];
-
     return (
         <div>
             <div>
@@ -55,7 +30,7 @@ const WeatherWidget = () => {
                 </div>
             </div>
             <div>
-                {windDirectionArrow}
+                <WindDirectionIcon degrees={weatherView?.windDirection} />
                 {`Wind: ${weatherView?.windSpeed} km/h`}
             </div>
             <div>
