@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { getWeather } from "../shared/api/weather";
+import { useState } from "react";
 import { useWeather } from "../entities/weather/model/useWeather";
 import { getWeatherViewData } from "../entities/weather/model/getWeatherViewData";
 import { getWeatherIcon } from "../entities/weather/model/getWeatherIcon";
@@ -9,21 +8,47 @@ import styles from "./WeatherWidget.module.scss";
 import forecastDays from "../shared/data/forecastDays";
 
 const WeatherWidget = () => {
-    const { weather, setWeather, error } = useWeather(
-        LATITUDE_ZP,
-        LONGITUDE_ZP,
+    const { weather } = useWeather(LATITUDE_ZP, LONGITUDE_ZP);
+
+    const [temperatureUnit, setTemperatureUnit] = useState("celsius");
+    const [windSpeedUnit, setWindSpeedUnit] = useState("kmh");
+
+    const weatherView = getWeatherViewData(
+        weather,
+        temperatureUnit,
+        windSpeedUnit,
     );
-
-    useEffect(() => {
-        getWeather(LATITUDE_ZP, LONGITUDE_ZP)
-            .then(({ current }) => setWeather(current))
-            .catch(console.error);
-    }, []);
-
-    const weatherView = getWeatherViewData(weather);
 
     return (
         <div className={styles.widget}>
+            <div className={styles.widgetUnits}>
+                <label className={styles.unitControl}>
+                    <span>Temperature</span>
+                    <select
+                        aria-label="Temperature unit"
+                        value={temperatureUnit}
+                        onChange={(event) =>
+                            setTemperatureUnit(event.target.value)
+                        }
+                    >
+                        <option value="celsius">°C</option>
+                        <option value="fahrenheit">°F</option>
+                    </select>
+                </label>
+                <label className={styles.unitControl}>
+                    <span>Wind speed</span>
+                    <select
+                        aria-label="Wind speed unit"
+                        value={windSpeedUnit}
+                        onChange={(event) =>
+                            setWindSpeedUnit(event.target.value)
+                        }
+                    >
+                        <option value="ms">M/s</option>
+                        <option value="kmh">Km/h</option>
+                    </select>
+                </label>
+            </div>
             <div className={styles.widgetHeader}>
                 <img
                     className={styles.widgetConditionIcon}
@@ -43,9 +68,9 @@ const WeatherWidget = () => {
                 </div>
             </div>
             <div className={styles.widgetWind}>
-                <p
-                    className={styles.widgetWindSpeed}
-                >{`Wind: ${weatherView?.windSpeed} km/h`}</p>
+                <p className={styles.widgetWindSpeed}>
+                    {`Wind: ${weatherView?.windSpeed} ${windSpeedUnit === "ms" ? "M/s" : "Km/h"}`}
+                </p>
                 <WindDirectionIcon
                     className={styles.widgetWindDirection}
                     degrees={weatherView?.windDirection}
