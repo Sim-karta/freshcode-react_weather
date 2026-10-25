@@ -6,10 +6,11 @@ export function useWeather(latitude, longitude) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setError(null);
-
         getWeather(latitude, longitude)
-            .then(({ current }) => setWeather(current))
+            .then(({ current }) => {
+                setWeather(current);
+                setError(null);
+            })
             .catch(setError);
     }, [latitude, longitude]);
 
