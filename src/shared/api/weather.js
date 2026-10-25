@@ -5,7 +5,7 @@ export function getWeather(latitude, longitude, { signal } = {}) {
         latitude: String(latitude),
         longitude: String(longitude),
         current:
-            "temperature_2m,wind_speed_10m,wind_direction_10m,precipitation",
+            "temperature_2m,wind_speed_10m,wind_direction_10m,weather_code",
         timezone: "auto",
     });
 
