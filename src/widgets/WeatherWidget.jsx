@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { getWeather } from "../shared/api/weather";
 import { useWeather } from "../entities/weather/model/useWeather";
 import { getWeatherViewData } from "../entities/weather/model/getWeatherViewData";
+import { getWeatherIcon } from "../entities/weather/model/getWeatherIcon";
 import { LATITUDE_ZP, LONGITUDE_ZP } from "../shared/configs/coordinates";
 import WindDirectionIcon from "../entities/weather/ui/WindDirectionIcon";
 import styles from "./WeatherWidget.module.scss";
+import forecastDays from "../shared/data/forecastDays";
 
 const WeatherWidget = () => {
     const { weather, setWeather, error } = useWeather(
@@ -23,6 +25,11 @@ const WeatherWidget = () => {
     return (
         <div className={styles.widget}>
             <div className={styles.widgetHeader}>
+                <img
+                    className={styles.widgetConditionIcon}
+                    src={getWeatherIcon(weatherView?.weatherCode)}
+                    alt={weatherView?.weatherInfo ?? "Current weather"}
+                />
                 <div className={styles.widgetDetails}>
                     <p className={styles.widgetTime}>
                         {weatherView?.dayAndTime}
@@ -46,17 +53,24 @@ const WeatherWidget = () => {
             </div>
             <div className={styles.widgetForecast}>
                 <ul className={styles.forecastList}>
-                    <li
-                        className={`${styles.forecastDay} ${styles.forecastToday}`}
-                    >
-                        Today
-                    </li>
-                    <li className={styles.forecastDay}>Tomorrow</li>
-                    <li className={styles.forecastDay}>Tuesday</li>
-                    <li className={styles.forecastDay}>Wendsday</li>
-                    <li className={styles.forecastDay}>Thursday</li>
-                    <li className={styles.forecastDay}>Friday</li>
-                    <li className={styles.forecastDay}>Saturday</li>
+                    {forecastDays.map(({ name, iconCode }, index) => (
+                        <li
+                            className={`${styles.forecastDay} ${
+                                index === 0 ? styles.forecastToday : ""
+                            }`}
+                            key={name}
+                        >
+                            <span className={styles.forecastDayName}>
+                                {name}
+                            </span>
+                            <img
+                                className={styles.forecastIcon}
+                                src={getWeatherIcon(iconCode)}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>
