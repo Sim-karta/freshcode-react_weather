@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 import { getWeather } from "../shared/api/weather.js";
+import {
+    MdNorth,
+    MdNorthEast,
+    MdEast,
+    MdSouthEast,
+    MdSouth,
+    MdSouthWest,
+    MdWest,
+    MdNorthWest,
+} from "react-icons/md";
 
 const LATITUDE_ZP = 47.84;
 const LONGITUDE_ZP = 35.14;
@@ -16,7 +26,7 @@ const WeatherWidget = () => {
     const temperature = weather?.temperature_2m;
     const windSpeed = weather?.wind_speed_10m;
     const windDirection = weather?.wind_direction_10m;
-    const precipitation = weather?.precipitation;
+    const weatherСode = weather?.weather_code;
     const time = weather?.time;
     const dayAndTime = time
         ? new Date(`${time}Z`).toLocaleString("en-GB", {
@@ -26,6 +36,22 @@ const WeatherWidget = () => {
               timeZone: "UTC",
           })
         : "";
+
+    const directions = [
+        <MdNorth />,
+        <MdNorthEast />,
+        <MdEast />,
+        <MdSouthEast />,
+        <MdSouth />,
+        <MdSouthWest />,
+        <MdWest />,
+        <MdNorthWest />,
+    ];
+
+    const windDirectionArrow =
+        windDirection == null
+            ? null
+            : directions[Math.round(windDirection / 45) % 8];
 
     return (
         <div>
@@ -37,7 +63,10 @@ const WeatherWidget = () => {
                     <p>Zaporizhzhia, Ukraine</p>
                 </div>
             </div>
-            <div>{`Wind: ${windDirection} ${windSpeed} ${precipitation}`} </div>
+            <div>
+                {windDirectionArrow}
+                {`Wind: ${windSpeed} ${weatherСode}`}
+            </div>
             <div>
                 <ul>
                     <li>Today</li>
