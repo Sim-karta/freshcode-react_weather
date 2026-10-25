@@ -1,15 +1,43 @@
+import { useEffect, useState } from "react";
+import { getWeather } from "../shared/api/weather.js";
+
+const LATITUDE_ZP = 47.84;
+const LONGITUDE_ZP = 35.14;
+
 const WeatherWidget = () => {
+    const [weather, setWeather] = useState(null);
+
+    useEffect(() => {
+        getWeather(LATITUDE_ZP, LONGITUDE_ZP)
+            .then(({ current }) => setWeather(current))
+            .catch(console.error);
+    }, []);
+
+    const temperature = weather?.temperature_2m;
+    const windSpeed = weather?.wind_speed_10m;
+    const windDirection = weather?.wind_direction_10m;
+    const precipitation = weather?.precipitation;
+    const time = weather?.time;
+    const dayAndTime = time
+        ? new Date(`${time}Z`).toLocaleString("en-GB", {
+              weekday: "long",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "UTC",
+          })
+        : "";
+
     return (
         <div>
             <div>
-                <img src="" alt="" />
+                <img src="123" alt="" />
                 <div>
-                    <p>Sunday, 18:00</p>
-                    <p>Cloudy 10*C</p>
+                    <p>{dayAndTime}</p>
+                    <p>{`Cloudy ${temperature}`}</p>
                     <p>Zaporizhzhia, Ukraine</p>
                 </div>
             </div>
-            <div>Wind: </div>
+            <div>{`Wind: ${windDirection} ${windSpeed} ${precipitation}`} </div>
             <div>
                 <ul>
                     <li>Today</li>
